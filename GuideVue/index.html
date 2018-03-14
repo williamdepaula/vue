@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="utf-8">
+	<title>Vue Guide</title>
+</head>
+<body>
+	<script src="js/vue.js"></script>
+
+	<!--
+	* Exemplo do vídeo do site: https://br.vuejs.org/v2/guide/index.html#O-que-e-Vue-js
+	-->
+	<div id="appVideo">
+		<ul>
+			<li v-for="product in products">
+				<input type="number" v-model.number="product.quantity">
+				{{ product.quantity }} {{ product.name }}
+				<span v-if="product.quantity === 0">
+					- OUT OF STOCK
+				</span>
+				<button @click="product.quantity += 1">
+					Add
+				</button>
+			</li>
+		</ul>
+		<h2>Total Inventory: {{ totalProducts }}</h2>
+	</div>
+
+	<script type="text/javascript">
+		const app = new Vue({
+			el: '#appVideo',
+			data: {
+				products: [
+					
+				]
+			},
+			computed: {
+				totalProducts () {
+					return this.products.reduce((sum, product) => {
+						return sum + product.quantity
+					}, 0)
+				}
+			},
+			created () {
+				fetch('https://api.myjson.com/bins/74l63')
+					.then(response => response.json())
+					.then(json => {
+						this.products = json.products
+					})
+			},
+		})
+	
+	</script>
+
+	<!--
+	* Exemplo 01 do site: https://br.vuejs.org/v2/guide/index.html#Renderizacao-Declarativa
+	-->
+
+	<div id="app01">
+		{{ message }}
+	</div>
+	<script type="text/javascript">
+		var app01 = new Vue({
+			el: '#app01',
+			data : {
+				message: 'Olá Vue!'
+			}
+		})
+	</script>
+
+	<!--
+	* Exemplo 02 do site: https://br.vuejs.org/v2/guide/index.html#Renderizacao-Declarativa
+	-->
+	<div id="app02">
+		<span v-bind:title="message">
+			Pare o mouse sobre mim e veja a dica interligada dinamicamente!
+		</span>
+	</div>
+	<script type="text/javascript">
+		var app02 = new Vue ({
+			el: '#app02',
+			data: {
+				message: 'Você carregou esta pagina em ' + new Date().toLocaleString()
+			}
+		})
+	</script>
+
+	<!--
+	* Exemplo 03 do site: https://br.vuejs.org/v2/guide/index.html#Condicionais-e-Lacos
+	-->
+	<div id="app03">
+		<p v-if="seen" >Agora você me viu</p>
+	</div>
+	<script type="text/javascript">
+		var app03 = new Vue({
+			el: '#app03',
+			data: {
+				seen: true,
+			}
+		})
+		
+	</script>
+
+	<!--
+	* Exemplo 04 do site: https://br.vuejs.org/v2/guide/index.html#Condicionais-e-Lacos
+	-->
+	<div id='app04'>
+		<ol>
+			<li v-for="todo in todos">
+				{{ todo.text}}				
+			</li>				
+		</ol>
+	</div>
+	<script type="text/javascript">
+		var app04 = new Vue({
+			el: '#app04',
+			data: {
+				todos: [
+					{text: 'Aprender JavaScript'},
+					{text: 'Aprender Vue'},
+					{text: 'Criar algo incrivel'},
+				]
+			}
+		})
+	</script>
+
+	<!--
+	* Exemplo 05 do site: https://br.vuejs.org/v2/guide/index.html#Tratando-Interacao-do-Usuario
+	-->
+	<div id="app05">
+		<p>{{ message }}</p>
+		<button v-on:click="reverseMessage">Inverter Mensagem</button>
+	</div>
+	<script type="text/javascript">
+		var app05 = new Vue({
+			el: "#app05",
+			data: {
+				message: "Olá Vue!"
+			},
+			methods: {
+				reverseMessage: function(){
+					this.message = this.message.split('').reverse().join('')
+				}
+			}
+		})	
+	</script>
+
+	<!--
+	* Exemplo 06 do site: https://br.vuejs.org/v2/guide/index.html#Tratando-Interacao-do-Usuario
+	-->
+	<div id="app06">
+		<p>{{ message }}</p>
+		<input v-model="message">
+	</div>
+	<script type="text/javascript">
+		var app06 = new Vue ({
+			el: '#app06',
+			data: {
+				message: 'Olá Vue!'
+			}
+		})
+	</script>
+
+	<!--
+	* Exemplo 07 do site: https://br.vuejs.org/v2/guide/index.html#Composicao-com-Componentes
+	-->
+	<div id="app07_0">
+		<h2>Todo List 1</h2>
+		<ol>
+			<!-- Cria uma instancia do componente todo-item -->
+			<todo-item v-for="item in todoList1" v-bind:todo="item" v-bind:key="item.id">
+				
+			</todo-item>
+		</ol>
+	</div>	
+
+
+	<div id="app07_1">
+		<h2>Todo List 2</h2>
+		<ol>
+			<!--
+				Agora provemos cada todo-item com o objeto todo que ele representa, de forma que seu conteudo possa ser dinâmico.
+				Também precisamos prover cada componente com uma "chave", a qual será explicada posteriormente.
+			-->
+			<todo-item v-for="item in todoList2" v-bind:todo="item" v-bind:key="item.id">
+
+			</todo-item>
+		</ol>
+	</div>
+	<script type="text/javascript">
+		Vue.component('todo-item', {
+			props: ['todo'],
+			template: '<li>{{ todo.text }}</li>'
+		})
+
+		var app07_1 = new Vue({
+			el: '#app07_1',
+			data: {
+				todoList2: [
+					{id: 0, text: 'Vegetais'},
+					{id: 1, text: 'Queijo'},
+					{id: 2, text: 'Qualquer coisa que humanos podem comer'},
+				]
+			}
+		})
+
+		var app07_0 = new Vue({
+			el: '#app07_0',
+			data: {
+				todoList1: [
+					{id: 0, text: "Lista 1 Item 1" },
+					{id: 1, text: "Lista 1 Item 2" },
+
+				]
+			}
+		})
+	</script>
+
+</body>
+
+
+</html>
