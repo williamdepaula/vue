@@ -1,4 +1,8 @@
 # login
+Implementação de uma pagina de login/inscreva-se utilizando vue, seguindo o
+tutorial de https://youtu.be/n8eW8D04tNc e utilizando como base o html/css de login 
+de https://codepen.io/khadkamhn/pen/ZGvPLo?q=login+form&limit=all&type=type-pens
+
 
 > A Vue.js project
 
